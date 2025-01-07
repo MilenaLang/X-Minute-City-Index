@@ -6,6 +6,7 @@ folium=0.16.0=pypi_0
 geopandas=0.14.4=pypi_0
 h3=3.7.7=pypi_0
 matplotlib=3.9.1=pypi_0
+notebook=7.0.8=py311hca03da5_2
 numpy=1.25.2=py311he598dae_0
 osmnx=1.9.3=pypi_0
 pandas=2.1.4=py311h7aedaa7_0
