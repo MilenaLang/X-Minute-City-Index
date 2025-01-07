@@ -4,7 +4,7 @@ This repository contains the code to create an x-minute city composite index for
 
 Exemplary result for the city of Heidelberg:
 
-![img.png](img/img.png)
+![img.png](img/Heidelberg_15min_normal.png)
 
 ## Relevance 
 The 15-minute city concept envisions access to all essential services - including living, working, commerce, healthcare, education and entertainment - within a 15-minute walk or bike ride. As accessibility is not equal throughout a city or across cities, a tool to measure pedestrian accessibility is necessary to implement the concept. Existing composite indices often lack timeframe-adaptability and inclusivity by assuming uniform mobility patterns and service needs. Thus, this composite index includes the adaptable timeframe of the x-minute city and three different population groups.  
