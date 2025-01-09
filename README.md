@@ -8,7 +8,7 @@ Exemplary result for the city of Heidelberg:
 
 ![img.png](img/example_image.png)
 [Open the interactive map](img/Heidelberg,%20Germany_foot-walking_15_normal_final.html)
-
+[View the interactive map](https://MilenaLang.github.io/X-Minute-City-Index//img/Heidelberg,%20Germany_foot-walking_15_normal_final.html)
 ## Relevance 
 The 15-minute city concept envisions access to all essential services - including living, working, commerce, healthcare, education and entertainment - within a 15-minute walk or bike ride. As accessibility is not equal throughout a city or across cities, a tool to measure pedestrian accessibility is necessary to implement the concept. Existing composite indices often lack timeframe-adaptability and inclusivity by assuming uniform mobility patterns and service needs. Thus, this composite index includes the adaptable timeframe of the x-minute city and three different population groups.  
 
