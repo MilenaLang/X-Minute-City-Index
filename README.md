@@ -1,6 +1,6 @@
 # X-Minute-City Composite Index
 
-Create your own accessibility analysis for your city and your needs!
+Create your own accessibility analysis for your city and needs!
 
 This repository contains the code to create an x-minute city composite index for every German city. The goal of this project is to assess pedestrian acccessibility and walkability in the context of different population group needs in the adaptable framework of the x-minute city. The user can specify the city, the timeframe and the population group (small children, normal, elderly). The results are visualized in an interactive folium dashboard. 
 
