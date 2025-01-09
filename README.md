@@ -1,6 +1,8 @@
 # X-Minute-City Composite Index
 
-This repository contains the code to create an x-minute city composite index for every German city. The goal of this project is to assess pedestrian acccessibility and walkability in the context of different population group needs in the adaptable framework of the x-minute city. The user can specify the city, the timeframe and the population group (small children, normal, elderly). The results are visualized in an interactive folium dashboard.
+Create your own accessibility analysis for your city and your needs!
+
+This repository contains the code to create an x-minute city composite index for every German city. The goal of this project is to assess pedestrian acccessibility and walkability in the context of different population group needs in the adaptable framework of the x-minute city. The user can specify the city, the timeframe and the population group (small children, normal, elderly). The results are visualized in an interactive folium dashboard. 
 
 Exemplary result for the city of Heidelberg:
 
@@ -25,7 +27,7 @@ Usage of the script:
 3. Open the x_minute_city_index.ipynb script in a scripting environment
 4. Run the script with your input parameters (city, timeframe, walk-speed) and check the results in the .html interactive dashboard
 
-Note: The index can be transfered to other countries by using country-specific osm.pbf files and eurostat/worldpop demographic data.
+Note: The script  can be adapted to different amenities, priorities and walking speeds. It can also be transfered to other countries by using country-specific osm.pbf files and eurostat/worldpop demographic data.
 
 ## Author 
 This project is part of a master's thesis in geoinformatics by Milena Bremer.
