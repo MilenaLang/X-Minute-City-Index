@@ -25,7 +25,7 @@ Usage of the script:
 3. Open the x_minute_city_index.ipynb script in a scripting environment
 4. Run the script with your input parameters (city, timeframe, walk-speed) and check the results in the .html interactive dashboard
 
-Note: The script can be adapted to other countries by using country-specific osm.pbf files and eurostat/worldpop demographic data.
+Note: The index can be transfered to other countries by using country-specific osm.pbf files and eurostat/worldpop demographic data.
 
 ## Author 
 This project is part of a master's thesis in geoinformatics by Milena Bremer.
