@@ -28,8 +28,8 @@ Usage of the script:
 4. Run the script with your input parameters (city, timeframe, walk-speed) and check the results in the .html interactive dashboard
 
 Note: The script  can be adapted to different amenities, priorities and walking speeds. It can also be transfered to other countries by using country-specific osm.pbf files and eurostat/worldpop demographic data.
-- to switch category priorities, change the weighting in the code:
-- 
+- to switch category priorities, change the weighting in the code
+- to change demographic data, specify another dataset as population data
 ## Author 
 This project is part of a master's thesis in geoinformatics by Milena Bremer.
 
