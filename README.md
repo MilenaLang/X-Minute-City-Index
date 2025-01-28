@@ -24,6 +24,7 @@ To use the jupyter notebook, the following requirements are needed:
 Usage of the script: 
 1. Install all software requirements if necessary
 2. Fork the repository
+3. Download the Zensus 2022 data from [here](https://heibox.uni-heidelberg.de/d/8c2774bd5b4f4f09b45d/) and copy it into the repository folder
 3. Open the x_minute_city_index.ipynb script in a scripting environment
 4. Run the script with your input parameters (city, timeframe, walk-speed) and check the results in the .html interactive dashboard
 
