@@ -15,9 +15,10 @@ log = logging.getLogger(__name__)
 
 def get_city_bboxes(city_name:str) -> tuple[gpd.GeoDataFrame, pd.DataFrame, CRS]:
     city_polygon = ox.geocode_to_gdf(city_name) # Get geometry for the place a geodataframe
-    buffered_bounds, est_utm_crs = get_bboxes_mode_time(city_polygon)
+    est_utm_crs = city_polygon.estimate_utm_crs()
+    # buffered_bounds, est_utm_crs = get_bboxes_mode_time(city_polygon)
 
-    return city_polygon, buffered_bounds, est_utm_crs
+    return city_polygon, est_utm_crs
 
 
 def get_bboxes_mode_time(city_polygon: gpd.GeoDataFrame) -> tuple[pd.DataFrame, CRS]:

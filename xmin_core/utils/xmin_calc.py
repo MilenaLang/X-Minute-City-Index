@@ -4,42 +4,20 @@ import geopandas as gpd
 import osmnx as ox
 import pandas as pd
 from pyproj import CRS
-from shapely import box
+from shapely import box, Polygon
 from xmin_core.utils.utils import (
     FacilitiesCategories, XMIN_Timeframse, geometry_to_single_point, MODE_SPEEDS, normalize_score, CATEGORY_BENCHMARKS,
 )
 
 log = logging.getLogger(__name__)
 
-def get_city_pois_categories(buffered_bounds: pd.DataFrame, est_utm_crs: CRS, savedir:str='./tmp') -> dict:
-    # Get the largest bbox to minimize number of queries
-    largeest_bbox = (
-        buffered_bounds['minx'].min(),
-        buffered_bounds['miny'].min(),
-        buffered_bounds['maxx'].max(),
-        buffered_bounds['maxy'].max(),
-    )
-
-    # # prepare buffered_bounds GeoDataFrame, including all modes and timeframes
-    # buffered_bounds['geometry'] = buffered_bounds.apply(
-    #     lambda row: box(row['minx'], row['miny'], row['maxx'], row['maxy']),
-    #     axis=1
-    # )
-    # buffered_bounds['mode_time'] = buffered_bounds['mode'].str[:4] + '_' + buffered_bounds['timeframe'].astype(str)
-    # buffered_bounds.set_index('mode_time', inplace=True)
-    # buffered_bounds = gpd.GeoDataFrame(
-    #     buffered_bounds[['mode', 'timeframe', 'geometry']],
-    #     geometry=buffered_bounds['geometry'],
-    #     crs=4326
-    # )
-
+def get_city_pois_categories(buffered_polygon: Polygon, est_utm_crs: CRS, savedir:str='./tmp') -> dict:
     # get pois for each category,
-    # all modes and timeframes information is saved as attrs: 'mode_time', 'mode', 'timeframe'
     pois_cate_filenames = {}
     for category in FacilitiesCategories:
         log.info(f'Getting pois modes for {category.name}')
         tags = category.value  # dict
-        most_pois_cate = ox.features.features_from_bbox(bbox=largeest_bbox, tags=tags)
+        most_pois_cate = ox.features.features_from_polygon(buffered_polygon, tags=tags)
         most_pois_cate = most_pois_cate[['geometry']]
 
         # convert multiple geometries to single point
@@ -49,14 +27,6 @@ def get_city_pois_categories(buffered_bounds: pd.DataFrame, est_utm_crs: CRS, sa
         most_pois_cate.to_file(savename, driver='GPKG')
         pois_cate_filenames[category.name] = savename
 
-        # pois_cate = gpd.sjoin(most_pois_cate, buffered_bounds, how='inner', predicate='within')
-        #
-        # # convert multiple geometries to single point
-        # pois_cate = geometry_to_single_point(pois_cate, est_utm_crs)
-        #
-        # savename = os.path.join(savedir, f"pois_pts_{category.name}.gpkg")
-        # pois_cate.to_file(savename, driver='GPKG')
-        # pois_cate_filenames.append(savename)
 
     return pois_cate_filenames
 

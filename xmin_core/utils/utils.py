@@ -20,6 +20,8 @@ BUFFER_DISTANCES = {
     mode: {t: speed * t * 60 for t in XMIN_Timeframse} for mode, speed in MODE_SPEEDS.items() # m
 }
 
+MAX_BUFFER_DISTANCE = max(MODE_SPEEDS.values()) * max(XMIN_Timeframse) * 60
+
 # Set the  H3 resolution (higher numbers means smaller hexagons)
 HEX_RESOLUTION = 8
 
