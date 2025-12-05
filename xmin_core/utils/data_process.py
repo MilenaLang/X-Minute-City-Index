@@ -8,6 +8,7 @@ import pandas as pd
 from pyproj import CRS
 from shapely import Polygon, MultiPolygon, box
 
+from xmin_core.utils.db import conn_ca_db, query_by_aoi, queryres2gdf
 from xmin_core.utils.utils import BUFFER_DISTANCES, HEX_RESOLUTION, area_ratio_within_city
 
 log = logging.getLogger(__name__)
@@ -74,3 +75,18 @@ def get_hex_grids(city_polygon: gpd.GeoDataFrame, savedir:str='./tmp') -> gpd.Ge
 
     return hexagons_gdf
 
+
+def get_population_data(
+    city_polygon: gpd.GeoDataFrame | Polygon | MultiPolygon,
+    crs: str | int,
+    db_env:str
+) -> gpd.GeoDataFrame:
+    if isinstance(city_polygon, gpd.GeoDataFrame):
+        city_polygon = city_polygon.union_all()
+
+    popdb = conn_ca_db(db_env)
+    db_table = popdb.metadata.tables['world_population']
+    res = query_by_aoi(db_table, city_polygon, int(crs))
+    res = queryres2gdf(res)
+
+    return res
