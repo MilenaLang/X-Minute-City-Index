@@ -1,16 +1,17 @@
-# This file may be used to create an environment using:
-# $ conda create --name <env> --file <this file>
-# platform: osx-arm64
-branca=0.7.2=pypi_0
-folium=0.16.0=pypi_0
-geopandas=0.14.4=pypi_0
-h3=3.7.7=pypi_0
-matplotlib=3.9.1=pypi_0
-notebook=7.0.8=py311hca03da5_2
-numpy=1.25.2=py311he598dae_0
-osmnx=1.9.3=pypi_0
-pandas=2.1.4=py311h7aedaa7_0
-requests=2.32.3=py311hca03da5_0
-shapely=2.0.4=pypi_0
-
-
+geopandas~=1.1.1
+pandas~=2.3.3
+GeoAlchemy2~=0.18.1
+SQLAlchemy~=2.0.44
+numpy~=2.3.5
+pyproj~=3.7.2
+shapely~=2.1.2
+osmnx~=2.0.6
+h3~=4.3.1
+requests~=2.32.5
+tqdm~=4.67.1
+dotenv~=0.9.9
+python-dotenv~=1.2.1
+matplotlib~=3.10.7
+branca~=0.8.2
+folium~=0.20.0
+ipython~=9.7.0
