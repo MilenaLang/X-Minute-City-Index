@@ -28,23 +28,22 @@ The number of reachable POIs per category is scaled to 0-100 by using benchmarks
 The final index score is the sum of normalized scores across categories. 
 
 ## Requirements
-
+See [requirments.txt](requirements.txt)
 
 ## Usage
 Usage of the script: 
 1. Install all software requirements if necessary
 2. Fork the repository 
-3. Deploy and activate ORS docker
+3. Deploy ORS locally and activate its docker :right: see [ORS github repository](https://github.com/GIScience/openrouteservice)
 4. Deploy the worldpop data as postresql database & provide it at `.env` file (please copy `.env_template` and rename it as `.env`)
 5. Run the following command:
 ```shell
-$ python -m xmin_core.main_xmin_urcls
+# Run the script with your self-defined work directory (Don't forget moving `resources/urcls_4229_int_poly` into your directory).
+$ python -m xmin_core.main_xmin_urcls <--workdir >
 ```
-6. Run the script with your self-defined work directory (Don't forget moving `resources/urcls_4229_int_poly` into your directory).
 
-Note: The script  can be adapted to different amenities, priorities and walking speeds. It can also be transfered to other countries by using country-specific osm.pbf files and eurostat/worldpop demographic data.
-- to switch category priorities, change the weighting in the code
-- to change demographic data, specify another dataset as population data
+
 ## Author 
-This project is part of a master's thesis in geoinformatics by Milena Bremer.
+[HeiGIT](https://heigit.org/)
+[Milena Bremer](https://github.com/MilenaLang/X-Minute-City-Index)
 
