@@ -32,6 +32,7 @@ See [requirments.txt](requirements.txt)
 
 ## Usage
 Usage of the script: 
+### Option 1: using requirements.txt
 1. Install all software requirements if necessary
 2. Fork the repository 
 3. Deploy ORS locally and activate its docker :right: see [ORS github repository](https://github.com/GIScience/openrouteservice)
@@ -41,7 +42,12 @@ Usage of the script:
 # Run the script with your self-defined work directory (Don't forget moving `resources/urcls_4229_int_poly` into your directory).
 $ python -m xmin_core.main_xmin_urcls <--workdir >
 ```
-
+### Option 2: using uv (recommended)
+1. Init your uv, activate venv and do sync.
+2. Run the following command:
+```shell
+$ uv run python xmin_core/main_xmin_urcls.py <--workdir >
+```
 
 ## Author 
 [HeiGIT](https://heigit.org/)
