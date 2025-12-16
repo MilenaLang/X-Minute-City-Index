@@ -45,9 +45,9 @@ def main_xmin(city_name: str):
     )
     city_pois_cates_files = get_city_pois_categories(buffered_city_polygon, est_utm_crs, savedir)
 
-    # # 2.2 assign population to hex grid. attr: Living
-    # # TODO: test it.
-    # hex_grids = get_population_info_hex_grids(hex_grids, city_polygon)
+    # 2.2 assign population to hex grid. attr: Living
+    # TODO: test it.
+    hex_grids = get_population_info_hex_grids(hex_grids, city_polygon)
 
     # 2.3 get reachable poi counts for each categories, mode, and timeframe.
     # city_pois_cates_files = {'commerce': '../resources/most_pois_pts_commerce.gpkg',

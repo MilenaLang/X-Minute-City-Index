@@ -85,8 +85,11 @@ def get_population_data(
         city_polygon = city_polygon.union_all()
 
     popdb = conn_ca_db(db_env)
-    db_table = popdb.metadata.tables['world_population']
-    res = query_by_aoi(db_table, city_polygon, int(crs))
-    res = queryres2gdf(res)
+    db_table = popdb.metadata.tables['world_pop']
+    query = query_by_aoi(db_table, city_polygon, int(crs))
+    with popdb.engine.connect() as conn:
+        res = conn.execute(query).mappings().all()
+
+    res = queryres2gdf(res, crs=crs, indexcol='rid')
 
     return res

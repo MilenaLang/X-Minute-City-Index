@@ -5,6 +5,8 @@ import osmnx as ox
 import pandas as pd
 from pyproj import CRS
 from shapely import box, Polygon
+
+from xmin_core.utils.data_process import get_population_data
 from xmin_core.utils.utils import (
     FacilitiesCategories, XMIN_Timeframse, geometry_to_single_point, MODE_SPEEDS, normalize_score, CATEGORY_BENCHMARKS,
 )
@@ -37,7 +39,7 @@ def get_population_info_hex_grids(hexagons: gpd.GeoDataFrame, city_polygon: gpd.
     # 1. get population from database
     ##################
     # TODO: import population data from database and aggregate to hex grids
-    pops_city = None # e.g. db query based on city polygon
+    pops_city = get_population_data(city_polygon, city_polygon.crs.to_epsg(), 'POP_DATABASE_URL') # e.g. db query based on city polygon
 
     ##################
     # 2. aggregate population to hex grids

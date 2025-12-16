@@ -40,13 +40,15 @@ def query_by_aoi(db_table, aoi = None, crs:int=4326):
         query = select(db_table) # return all data
     else: # special cities
         aoi_geom = WKTElement(aoi.wkt, srid=crs)
-        query = select(db_table).where(db_table.c.geometry.op('&&')(aoi_geom) & db_table.c.geometry.ST_Within(aoi_geom))
+        query = select(db_table).where(db_table.c.geom.op('&&')(aoi_geom) & db_table.c.geom.ST_Intersects(aoi_geom))
 
     return query
 
 
 def queryres2gdf(result, crs:str, indexcol:str) -> gpd.GeoDataFrame:
     result_gdf = pd.DataFrame(result)
+    if 'geom' in result_gdf.columns: result_gdf.rename(columns={'geom': 'geometry'}, inplace=True)
+
     result_gdf['geometry'] = gpd.GeoSeries.from_wkb(result_gdf['geometry'].astype(str))
     result_gdf = gpd.GeoDataFrame(result_gdf, crs=f'{crs}').set_index(indexcol)
 

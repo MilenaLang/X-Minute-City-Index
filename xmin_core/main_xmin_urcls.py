@@ -40,9 +40,8 @@ def main_xmin_one_aoi(aoi: gpd.GeoSeries | Polygon | MultiPolygon, org_crs: CRS,
     )
     city_pois_cates_files = get_city_pois_categories(buffered_aoi, est_utm_crs, workdir)
 
-    # # # 2.2 assign population to hex grid. attr: Living
-    # # # TODO: test it.
-    # hex_grids = get_population_info_hex_grids(hex_grids, aoi)
+    # 2.2 assign population to hex grid. attr: Living
+    hex_grids = get_population_info_hex_grids(hex_grids, aoi)
 
     # 2.3 get reachable poi counts for each categories, mode, and timeframe.
     pois_cnt_cates_files = get_reachable_poi_cnt_categories(hex_grids, city_pois_cates_files, workdir)
