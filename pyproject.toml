@@ -1,0 +1,25 @@
+[project]
+name = "x-minute-city-index"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "branca~=0.8.2",
+    "dotenv~=0.9.9",
+    "folium~=0.20.0",
+    "geoalchemy2~=0.18.1",
+    "geopandas~=1.1.1",
+    "h3~=4.3.1",
+    "ipython~=9.7.0",
+    "matplotlib~=3.10.7",
+    "numpy~=2.3.5",
+    "osmnx~=2.0.6",
+    "pandas~=2.3.3",
+    "pyproj~=3.7.2",
+    "python-dotenv~=1.2.1",
+    "requests~=2.32.5",
+    "shapely~=2.1.2",
+    "sqlalchemy~=2.0.44",
+    "tqdm~=4.67.1",
+]
