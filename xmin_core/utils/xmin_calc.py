@@ -64,20 +64,16 @@ def get_population_info_hex_grids(hexagons: gpd.GeoDataFrame, city_polygon: gpd.
 
     # 2.6 Sum the weighted populations to get the total population for each hexagon
     population_by_hex = intersection_gdf.groupby('hex_id')['weighted_population'].sum().reset_index()
-    population_by_hex.rename(columns={'weighted_population': 'Einwohner'}, inplace=True)
+    population_by_hex.rename(columns={'weighted_population': 'living'}, inplace=True)
 
     # 2.7 Merge the calculated population back into the hexagons dataframe
     hexagons_w_pop = hexagons.merge(population_by_hex, on='hex_id', how='left')
 
     # Filter out hexagons with no inhabitants
     hexagons_w_pop = hexagons_w_pop[
-        (hexagons_w_pop['Einwohner'].notnull()) & (hexagons_w_pop['Einwohner'] != 0)
-        ]
+        (hexagons_w_pop['living'].notnull()) & (hexagons_w_pop['living'] != 0)
+    ]
 
-    ##################
-    # 3. set population-related attributes
-    ##################
-    hexagons_w_pop.rename(columns={'Einwohner': 'living'}, inplace=True)
     hexagons_w_pop['living'] = hexagons_w_pop['living'].fillna(0)
 
     return hexagons_w_pop
