@@ -25,13 +25,13 @@ def open_db(db_link: str) -> DatabaseConnection:
     return db_conn
 
 
-def conn_ca_db(env_name:str) -> DatabaseConnection:
-    ca_db_link = os.getenv(env_name)
-    ca_db_conn = open_db(ca_db_link)
+def conn_pop_db(env_name:str) -> DatabaseConnection:
+    pop_db_link = os.getenv(env_name)
+    pop_db_conn = open_db(pop_db_link)
 
-    if not ca_db_conn:
+    if not pop_db_conn:
         raise ValueError("CA database is not available.")
-    return ca_db_conn
+    return pop_db_conn
 
 
 

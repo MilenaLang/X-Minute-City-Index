@@ -7,8 +7,9 @@ import osmnx as ox
 import pandas as pd
 from pyproj import CRS
 from shapely import Polygon, MultiPolygon, box
-
-from xmin_core.utils.db import conn_ca_db, query_by_aoi, queryres2gdf
+from sqlalchemy import MetaData, create_engine, select
+from geoalchemy2 import WKTElement
+from xmin_core.utils.db import conn_pop_db, query_by_aoi, queryres2gdf
 from xmin_core.utils.utils import BUFFER_DISTANCES, HEX_RESOLUTION, area_ratio_within_city
 
 log = logging.getLogger(__name__)
@@ -84,12 +85,11 @@ def get_population_data(
     if isinstance(city_polygon, gpd.GeoDataFrame):
         city_polygon = city_polygon.union_all()
 
-    popdb = conn_ca_db(db_env)
+    popdb = conn_pop_db(db_env)
     db_table = popdb.metadata.tables['world_pop']
     query = query_by_aoi(db_table, city_polygon, int(crs))
     with popdb.engine.connect() as conn:
         res = conn.execute(query).mappings().all()
-
     res = queryres2gdf(res, crs=crs, indexcol='rid')
 
     return res
