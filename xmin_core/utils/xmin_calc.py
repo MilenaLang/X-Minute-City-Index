@@ -94,6 +94,12 @@ def get_xmin_index_score(
     savedir = os.path.join(savedir, 'index_score')
     os.makedirs(savedir, exist_ok=True)
 
+    # calculate living_normalized
+    hex_grids['living_normalized'] = normalize_score(
+        hex_grids['living'].values,
+        CATEGORY_BENCHMARKS['living'],
+    )
+
     # re-organize pois_cnt based on their modes and times.
     pois_cnt_modes_times = {f'{m[:4]}_{t}': [] for m in modes for t in XMIN_Timeframse }
     for name_cate, pois_cnt_cate_files in pois_cnt_cates_files.items():
