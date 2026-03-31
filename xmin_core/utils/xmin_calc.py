@@ -1,6 +1,7 @@
 import os
 import logging
 import geopandas as gpd
+import numpy as np
 import osmnx as ox
 import pandas as pd
 from pyproj import CRS
@@ -91,10 +92,7 @@ def get_xmin_index_score(
     os.makedirs(savedir, exist_ok=True)
 
     # calculate living_normalized
-    hex_grids['living_normalized'] = normalize_score(
-        hex_grids['living'].values,
-        CATEGORY_BENCHMARKS['living'],
-    )
+    hex_grids['living_normalized'] = np.minimum(hex_grids['living'].values / CATEGORY_BENCHMARKS['living'] * 100, 100)
 
     # re-organize pois_cnt based on their modes and times.
     pois_cnt_modes_times = {f'{m[:4]}_{t}': [] for m in modes for t in XMIN_Timeframse }
