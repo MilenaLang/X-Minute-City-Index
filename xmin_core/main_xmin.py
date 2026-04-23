@@ -34,18 +34,18 @@ def main_xmin(city_name: str, raster_s3_settings: RasterS3Settings):
     # 1.2 generate hex grids for each mode and timeframe
     hex_grids = get_hex_grids(city_polygon)
 
-    # ##########
-    # # 2. map population and poi information to hex grids
-    # ##########
-    # # 2.1 get pois for different categories within each mode and timeframe bbox
-    # buffered_city_polygon = (
-    #     gpd.GeoSeries(city_polygon.union_all(), crs=city_polygon.crs)
-    #     .to_crs(est_utm_crs)
-    #     .buffer(MAX_BUFFER_DISTANCE)
-    #     .to_crs(4326)
-    #     .geometry.iloc[0]
-    # )
-    # city_pois_cates_files = get_city_pois_categories(buffered_city_polygon, est_utm_crs, savedir)
+    ##########
+    # 2. map population and poi information to hex grids
+    ##########
+    # 2.1 get pois for different categories within each mode and timeframe bbox
+    buffered_city_polygon = (
+        gpd.GeoSeries(city_polygon.union_all(), crs=city_polygon.crs)
+        .to_crs(est_utm_crs)
+        .buffer(MAX_BUFFER_DISTANCE)
+        .to_crs(4326)
+        .geometry.iloc[0]
+    )
+    city_pois_cates_files = get_city_pois_categories(buffered_city_polygon, est_utm_crs, savedir)
 
     # 2.2 assign population to hex grid. attr: Living
     hex_grids = get_population_info_hex_grids(raster_s3_settings, hex_grids, city_polygon)
