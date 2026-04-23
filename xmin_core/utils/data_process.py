@@ -1,4 +1,5 @@
 import logging
+from typing import Any
 
 import geopandas as gpd
 import h3
@@ -83,7 +84,7 @@ def get_population_from_raster_data(
     raster_s3_settings: RasterS3Settings,
     city_polygon: gpd.GeoDataFrame | Polygon | MultiPolygon,
     crs: str | int,
-) -> gpd.GeoDataFrame:
+) -> dict[str, Any]:
     if isinstance(city_polygon, Polygon | MultiPolygon):
         city_polygon = gpd.GeoDataFrame(geometry=[city_polygon], crs=crs)
 
@@ -94,6 +95,9 @@ def get_population_from_raster_data(
             clipped_pop_raster, pop_transform = mask(src, [bbox_bounds], crop=True, all_touched=True, indexes=1)
             src_crs = src.crs
 
-    pop_gdf = raster_to_gdf(data=clipped_pop_raster, transform=pop_transform, crs=src_crs)
 
-    return pop_gdf.to_crs(crs)
+    return dict(
+        clipped_raster = clipped_pop_raster,
+        transform = pop_transform,
+        src_crs = src_crs
+    )
