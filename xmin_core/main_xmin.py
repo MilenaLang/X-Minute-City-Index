@@ -1,5 +1,7 @@
 import argparse
 import geopandas as gpd
+
+from xmin_core.settings import RasterS3Settings
 from xmin_core.utils.data_process import get_city_bboxes, get_hex_grids
 from xmin_core.utils.reachable_pois import get_reachable_poi_cnt_categories
 from xmin_core.utils.utils import MAX_BUFFER_DISTANCE
@@ -21,7 +23,7 @@ def parser_args():
     return parser.parse_args()
 
 
-def main_xmin(city_name: str):
+def main_xmin(city_name: str, raster_s3_settings: RasterS3Settings):
     savedir = '../resources'
     ##########
     # 1. get basic geometry data: bboxes for each mode and timeframe; hex_grids
@@ -46,8 +48,7 @@ def main_xmin(city_name: str):
     city_pois_cates_files = get_city_pois_categories(buffered_city_polygon, est_utm_crs, savedir)
 
     # 2.2 assign population to hex grid. attr: Living
-    # TODO: test it.
-    hex_grids = get_population_info_hex_grids(hex_grids, city_polygon)
+    hex_grids = get_population_info_hex_grids(raster_s3_settings, hex_grids, city_polygon)
 
     # 2.3 get reachable poi counts for each categories, mode, and timeframe.
     # city_pois_cates_files = {'commerce': '../resources/most_pois_pts_commerce.gpkg',
@@ -94,5 +95,8 @@ if __name__ == "__main__":
     city_name = args.city
     print(f"Analyzing data for city: {city_name}")
 
-    main_xmin(city_name)
+    # initialize settings
+    raster_s3_settings = RasterS3Settings()
+
+    main_xmin(city_name, raster_s3_settings)
 

@@ -7,7 +7,8 @@ import pandas as pd
 from pyproj import CRS
 from shapely import box, Polygon
 
-from xmin_core.utils.data_process import get_population_data
+from xmin_core.settings import RasterS3Settings
+from xmin_core.utils.data_process import get_population_from_raster_data
 from xmin_core.utils.utils import (
     FacilitiesCategories, XMIN_Timeframse, geometry_to_single_point, MODE_SPEEDS, normalize_score, CATEGORY_BENCHMARKS,
 )
@@ -35,17 +36,24 @@ def get_city_pois_categories(buffered_polygon: Polygon, est_utm_crs: CRS, savedi
 
 
 
-def get_population_info_hex_grids(hexagons: gpd.GeoDataFrame, city_polygon: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
+def get_population_info_hex_grids(
+    raster_s3_settings: RasterS3Settings,
+    hexagons: gpd.GeoDataFrame,
+    city_polygon: gpd.GeoDataFrame
+) -> gpd.GeoDataFrame:
     ##################
     # 1. get population from database
     ##################
-    # TODO: import population data from database and aggregate to hex grids
-    pops_city = get_population_data(city_polygon, city_polygon.crs.to_epsg(), 'POP_DATABASE_URL') # e.g. db query based on city polygon
+    pops_city_gdf = get_population_from_raster_data(
+        raster_s3_settings,
+        city_polygon,
+        city_polygon.crs.to_epsg()
+    )
 
     ##################
     # 2. aggregate population to hex grids
     ##################
-    intersection_gdf = gpd.overlay(hexagons, pops_city, how='intersection')
+    intersection_gdf = gpd.overlay(hexagons, pops_city_gdf, how='intersection')
 
     # 2.1 Calculate area of overlap for each intersection
     intersection_gdf['overlap_area'] = intersection_gdf.area
@@ -61,7 +69,7 @@ def get_population_info_hex_grids(hexagons: gpd.GeoDataFrame, city_polygon: gpd.
     intersection_gdf['area_weight'] = intersection_gdf['overlap_area'] / intersection_gdf['total_overlap_area']
 
     # 2.5 Calculate the area-weighted population contribution for each intersection
-    intersection_gdf['weighted_population'] = intersection_gdf['area_weight'] * intersection_gdf['Einwohner']
+    intersection_gdf['weighted_population'] = intersection_gdf['area_weight'] * intersection_gdf['raster_val']
 
     # 2.6 Sum the weighted populations to get the total population for each hexagon
     population_by_hex = intersection_gdf.groupby('hex_id')['weighted_population'].sum().reset_index()
@@ -73,7 +81,7 @@ def get_population_info_hex_grids(hexagons: gpd.GeoDataFrame, city_polygon: gpd.
     # Filter out hexagons with no inhabitants
     hexagons_w_pop = hexagons_w_pop[
         (hexagons_w_pop['living'].notnull()) & (hexagons_w_pop['living'] != 0)
-    ]
+        ]
 
     hexagons_w_pop['living'] = hexagons_w_pop['living'].fillna(0)
 
