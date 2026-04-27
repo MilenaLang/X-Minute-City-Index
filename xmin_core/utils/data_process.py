@@ -1,16 +1,18 @@
 import logging
+from typing import Any
 
 import geopandas as gpd
 import h3
 import numpy as np
 import osmnx as ox
 import pandas as pd
+import rasterio
 from pyproj import CRS
+from rasterio.mask import mask
 from shapely import Polygon, MultiPolygon, box
-from sqlalchemy import MetaData, create_engine, select
-from geoalchemy2 import WKTElement
-from xmin_core.utils.db import conn_pop_db, query_by_aoi, queryres2gdf
-from xmin_core.utils.utils import BUFFER_DISTANCES, HEX_RESOLUTION, area_ratio_within_city
+
+from xmin_core.settings import RasterS3Settings
+from xmin_core.utils.utils import BUFFER_DISTANCES, HEX_RESOLUTION, area_ratio_within_city, raster_to_gdf
 
 log = logging.getLogger(__name__)
 
@@ -77,19 +79,25 @@ def get_hex_grids(city_polygon: gpd.GeoDataFrame, savedir:str='./tmp') -> gpd.Ge
     return hexagons_gdf
 
 
-def get_population_data(
+
+def get_population_from_raster_data(
+    raster_s3_settings: RasterS3Settings,
     city_polygon: gpd.GeoDataFrame | Polygon | MultiPolygon,
     crs: str | int,
-    db_env:str
-) -> gpd.GeoDataFrame:
-    if isinstance(city_polygon, gpd.GeoDataFrame):
-        city_polygon = city_polygon.union_all()
+) -> dict[str, Any]:
+    if isinstance(city_polygon, Polygon | MultiPolygon):
+        city_polygon = gpd.GeoDataFrame(geometry=[city_polygon], crs=crs)
 
-    popdb = conn_pop_db(db_env)
-    db_table = popdb.metadata.tables['world_pop']
-    query = query_by_aoi(db_table, city_polygon, int(crs))
-    with popdb.engine.connect() as conn:
-        res = conn.execute(query).mappings().all()
-    res = queryres2gdf(res, crs=crs, indexcol='rid')
+    with rasterio.Env(raster_s3_settings.s3_client, AWS_VIRTUAL_HOSTING=False):
+        with rasterio.open(raster_s3_settings.pop_raster_url) as src:
+            aoi_proj = city_polygon.to_crs(src.crs)
+            bbox_bounds = box(*aoi_proj.total_bounds)
+            clipped_pop_raster, pop_transform = mask(src, [bbox_bounds], crop=True, all_touched=True, indexes=1)
+            src_crs = src.crs
 
-    return res
+
+    return dict(
+        clipped_raster = clipped_pop_raster,
+        transform = pop_transform,
+        src_crs = src_crs
+    )

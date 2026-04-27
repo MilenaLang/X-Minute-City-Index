@@ -4,7 +4,8 @@ from enum import Enum
 
 import numpy as np
 from pyproj import CRS
-from shapely import MultiPolygon, MultiLineString, Point
+from rasterio.features import shapes
+from shapely import MultiPolygon, MultiLineString
 
 #############################################################################################
 # basic setting
@@ -64,7 +65,6 @@ class FacilitiesCategories(Enum):
 
 
 
-
 ################
 # geometry to single point
 ################
@@ -102,6 +102,21 @@ def geometry_to_single_point(geom_gpd: gpd.GeoDataFrame, est_utm_crs: CRS):
 
     geom_gpd['geometry'] = geom_gpd['geometry'].to_crs(epsg=4326)
     return geom_gpd
+
+
+################
+# raster image to gdf
+################
+def raster_to_gdf(data, transform, crs):
+    """Convert raster array to GeoDataFrame of pixels"""
+    mask = data >= 0
+    geoms = [
+        {'properties': {'raster_val': v}, 'geometry': s}
+        for i, (s, v) in enumerate(shapes(data, mask=mask, transform=transform))
+    ]
+
+    # 3. & 4. Convert to GeoDataFrame
+    return gpd.GeoDataFrame.from_features(geoms, crs=crs)
 
 
 ################
