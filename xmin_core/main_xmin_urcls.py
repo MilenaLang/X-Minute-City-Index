@@ -5,6 +5,7 @@ import geopandas as gpd
 from pyproj import CRS
 from shapely import Polygon, MultiPolygon
 
+from xmin_core.settings import RasterS3Settings
 from xmin_core.utils.data_process import get_city_bboxes, get_hex_grids
 from xmin_core.utils.reachable_pois import get_reachable_poi_cnt_categories
 from xmin_core.utils.utils import MAX_BUFFER_DISTANCE
@@ -15,7 +16,12 @@ from xmin_core.utils.xmin_calc import (
 )
 
 
-def main_xmin_one_aoi(aoi: gpd.GeoSeries | Polygon | MultiPolygon, org_crs: CRS, workdir:str):
+def main_xmin_one_aoi(
+    aoi: gpd.GeoSeries | Polygon | MultiPolygon,
+    org_crs: CRS,
+    raster_s3_settings: RasterS3Settings,
+    workdir:str
+):
     ##########
     # 1. get basic geometry data: polygon + crs; hex_grids
     ##########
@@ -41,7 +47,7 @@ def main_xmin_one_aoi(aoi: gpd.GeoSeries | Polygon | MultiPolygon, org_crs: CRS,
     city_pois_cates_files = get_city_pois_categories(buffered_aoi, est_utm_crs, workdir)
 
     # 2.2 assign population to hex grid. attr: Living
-    hex_grids = get_population_info_hex_grids(hex_grids, aoi)
+    hex_grids = get_population_info_hex_grids(raster_s3_settings, hex_grids, aoi)
 
     # 2.3 get reachable poi counts for each categories, mode, and timeframe.
     pois_cnt_cates_files = get_reachable_poi_cnt_categories(hex_grids, city_pois_cates_files, workdir)
@@ -52,7 +58,7 @@ def main_xmin_one_aoi(aoi: gpd.GeoSeries | Polygon | MultiPolygon, org_crs: CRS,
 
 
 
-def main_xmin_urcls(workdir):
+def main_xmin_urcls(raster_s3_settings: RasterS3Settings, workdir: str):
 
     ##########
     # 1. get basic geometry data: aois in urcls data & create buffer for max distance based on mode and timeframe
@@ -66,7 +72,7 @@ def main_xmin_urcls(workdir):
     # 2. execute accessibility calculation for every aoi
     ##########
     for idx, aoi in urcls_aois.iterrows():
-        main_xmin_one_aoi(aoi, urcls_aois.crs, workdir)
+        main_xmin_one_aoi(aoi, urcls_aois.crs, raster_s3_settings, workdir)
 
 def parser_args():
     parser = argparse.ArgumentParser(description="XMin city composite index")
@@ -79,9 +85,8 @@ def parser_args():
     return parser.parse_args()
 
 if __name__ == "__main__":
-    from dotenv import load_dotenv
-    load_dotenv()
-
     args = parser_args()
-    main_xmin_urcls(args.workdir)
+
+    raster_s3_settings = RasterS3Settings()
+    main_xmin_urcls(raster_s3_settings, args.workdir)
 
