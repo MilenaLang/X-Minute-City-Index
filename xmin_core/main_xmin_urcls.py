@@ -68,8 +68,7 @@ def main_xmin_urcls(raster_s3_settings: RasterS3Settings, ors_settings: ORSSetti
     # 1. get basic geometry data: aois in urcls data & create buffer for max distance based on mode and timeframe
     ##########
     # 1.1 get aois
-    # urcls_path = os.path.join(workdir, 'urcls_4229_int_poly', 'urcls_4229_int_poly.shp')
-    urcls_path = '/home/gefeik/HGT-Projects-research/xmin_city/X-Minute-City-Index/test/test_data/test_aoi_xmin.geojson'
+    urcls_path = os.path.join(workdir, 'urcls_4229_int_poly', 'urcls_4229_int_poly.shp')
     urcls_aois = gpd.read_file(urcls_path)
     urcls_aois = urcls_aois.to_crs(4326)
     org_crs = urcls_aois.crs
